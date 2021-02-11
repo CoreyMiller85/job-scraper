@@ -2,7 +2,7 @@ const puppeteer = require("puppeteer");
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
   });
   const page = await browser.newPage();
   await page.goto(
@@ -15,12 +15,8 @@ const puppeteer = require("puppeteer");
 
   await autoScroll(page);
 
-  await page.screenshot({
-    path: "yoursite.png",
-    fullPage: true,
-  });
-
   const listings = await page.evaluate(() => {
+<<<<<<< HEAD
     return Array.from(
       document.querySelectorAll("div.col-2.layout-results")
     ).map((ele) => {
@@ -42,11 +38,37 @@ const puppeteer = require("puppeteer");
         };
       }
     });
+=======
+    // get node list of elements and then compile into array
+    return (
+      Array.from(document.querySelectorAll("div.col-2.layout-results"))
+        .map((ele) => {
+          return {
+            // place the information from eact HTML element, into each like object field
+            title: ele.querySelector(".data-results-title.dark-blue-text.b")
+              .textContent,
+            logo: ele.querySelector(".data-results-img img")
+              ? ele.querySelector(".data-results-img img").src
+              : null,
+            details: {
+              company:
+                //Needs Refactor
+                ele.querySelector(".data-details, span").textContent !== null
+                  ? ele.querySelector(".data-details, span").textContent
+                  : null,
+            },
+          };
+        })
+        //filter out elements that return loading
+        .filter((element) => element.title !== "")
+    );
+>>>>>>> dc64446d159fef7b5767ca01e327c5b61c4ba134
   });
   console.log(listings);
   await browser.close();
 })();
 
+//Page scroll function for lazy loading
 async function autoScroll(page) {
   await page.evaluate(async () => {
     await new Promise((resolve, reject) => {
