@@ -35,11 +35,21 @@ const storeData = (data, path) => {
           logo: ele.querySelector(".data-results-img img")
             ? ele.querySelector(".data-results-img img").src
             : null,
+          company: `${ele.querySelector(".data-details span").textContent}`,
+          location: `${
+            ele.querySelector(".data-details span:nth-child(2)").textContent
+          }`,
+          jobType: `${
+            ele.querySelector(".data-details span:nth-child(3)").textContent
+          }`,
+          link: ele.querySelector("a.data-results-content").href,
+          desc: ele.querySelector(".block.show-mobile").textContent,
         };
       }
     });
   });
   storeData(listings, "listings.json");
+  console.log(listings);
   await browser.close();
 })();
 
