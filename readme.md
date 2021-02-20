@@ -5,4 +5,5 @@ Returns a JSON file with entries for Job title, company, companys logo, type of 
 
 ## Todo:
 
+- allow argv to set the search parameters
 - improve all of script.
