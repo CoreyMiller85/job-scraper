@@ -48,9 +48,46 @@ const storeData = (data, path) => {
       }
     });
   });
+  try {
+    await Promise.all(
+      listings.map(async (l) => {
+        try {
+          const page2 = await browser.newPage();
+          await page2.goto(l.link);
+          /*
+          Query (".data-display-container.bloc") and store it as test2.
+          */
+          const test2 = "testing";
+          l.fullDesc = test2;
+        } catch (err) {
+          console.log(err);
+        }
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
+
   storeData(listings, "listings.json");
   await browser.close();
 })();
+
+async function getDetails(object) {
+  const browser = await puppeteer.launch({
+    headless: true,
+  });
+  const page = await browser.newPage();
+  await page.goto(object.link);
+  await page.setViewport({
+    width: 800,
+    height: 800,
+  });
+  const details = await page.evaluate(
+    () => document.querySelector(".data-display-container.bloc").textContent
+  );
+  await browser.close();
+  return details;
+}
 
 async function autoScroll(page) {
   await page.evaluate(async () => {
